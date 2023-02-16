@@ -75,7 +75,7 @@ export class Board {
         this.cells.set(pos.x + pos.y * 8, figure)
     }
 
-    onCellClick(pos:IPosition, selectedFigure: Figure | null): (Figure | null){
+    onCellClick(pos:IPosition, selectedFigure: Figure | null, isMarked: boolean): (Figure | null){
         if(selectedFigure == null){
             let figure = this.cells.get(pos.x + pos.y * 8)
             if(figure != null && figure.side == this.turn ){
@@ -84,21 +84,18 @@ export class Board {
             return null
         }
         else{
-            return null
-            switch (this.turn) {
-                case 'Black':
-                    
-                    break;
-            
-                case 'White':
-                    
-                    break;
-                default:
-                    break;
+            if(isMarked){
+                this.cells.set(selectedFigure.position.x + selectedFigure.position.y * 8, null)
+                this.cells.set(pos.x + pos.y*8, selectedFigure)
+                selectedFigure.moveFigure({x:pos.x,y:pos.y})
+                this.turn = this.turn == 'White' ? 'Black' : 'White'
             }
+            return null
         }
     }
-    whoOnThisPosition() {
 
+    isMarkedPosition(pos: IPosition, selectedFigure: Figure): boolean{
+        let allMoves: Array<IPosition> = selectedFigure.getMoves()
+        return allMoves.find((figurePosition)=> figurePosition.x == pos.x && figurePosition.y == pos.y) != undefined
     }
 }

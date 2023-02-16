@@ -3,7 +3,6 @@ import QueenBlack from 'assets/QueenBlack.png'
 import QueenWhite from 'assets/QueenWhite.png'
 
 export class Queen extends Figure{
-    attackMoves: Array<IPosition> = []
 
     constructor(pos: IPosition, side: Side){
         let img = side == 'Black' ? QueenBlack : QueenWhite
@@ -11,6 +10,8 @@ export class Queen extends Figure{
     }
 
     getMoves(): Array<IPosition>{
+        this.attackMoves = []
+        this.movement = []
         let tempArr = [[-1,0], [1,0], [0,1], [0,-1], [-1,-1], [1,1], [-1,1], [1,-1]]
         for(let i = 1; i < 8 ; i++){
             for(let j = 0; j < 8; j++){

@@ -4,7 +4,6 @@ import KingWhite from 'assets/KingWhite.png'
 
 export class King extends Figure{
     firstMove: boolean = true
-    attackMoves: Array<IPosition> = []
 
     constructor(pos: IPosition, side: Side){
         let img = side == 'Black' ? KingBlack : KingWhite
@@ -12,6 +11,8 @@ export class King extends Figure{
     }
 
     getMoves(): Array<IPosition>{
+        this.attackMoves = []
+        this.movement = []
         let tempArr = [[-1,0], [1,0], [0,1], [0,-1], [-1,-1], [1,1], [-1,1], [1,-1]]
         for(let j = 0; j < 8; j++){
             let newXpos = this.position.x+tempArr[j][0]
@@ -26,4 +27,8 @@ export class King extends Figure{
         return this.attackMoves
     }
     
+    moveFigure(newPos: IPosition){
+        this.firstMove = false
+        this.position = newPos
+    }
 }

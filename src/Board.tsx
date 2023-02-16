@@ -12,20 +12,14 @@ function GameBoard() {
   const [selectedFigure, setSelectedFigure] = useState<Figure | null>(null)
   const numbers = [0, 1, 2, 3, 4, 5, 6, 7];
 
-  const onClickHandler = (pos: IPosition) =>{
-    let tempFigure = board.onCellClick(pos, selectedFigure)
-    console.log(tempFigure)
+  const onClickHandler = (pos: IPosition, isMarked: boolean) =>{
+    let tempFigure = board.onCellClick(pos, selectedFigure, isMarked)
     setSelectedFigure(tempFigure)
   }
 
   const positionCompare = (pos1: IPosition,pos2:IPosition) : boolean =>{
     return (pos1.x == pos2.x) && (pos1.y == pos2.y)
   }
-
-  useEffect(() => {
-   console.log(selectedFigure)
-  }, [selectedFigure])
-  
 
   return (
     <BoardContainer>
@@ -34,7 +28,16 @@ function GameBoard() {
           numbers.map((i) => {
             return numbers.map((j) => {
               let tempCell = cells.get(i*8+j)
-              return tempCell !== undefined && <Cell key={i*8+j} selected={selectedFigure != null && positionCompare(selectedFigure.position, {x:j,y:i})} position={{x:j,y:i}} figure={tempCell} canMoveHere={false} onClickHandler={(pos)=>onClickHandler(pos)}></Cell> 
+              let isMarked = selectedFigure != null && board.isMarkedPosition({x:j,y:i},selectedFigure)
+              return tempCell !== undefined && 
+              <Cell 
+                key={i*8+j} 
+                selected={selectedFigure != null && positionCompare(selectedFigure.position, {x:j,y:i})} 
+                position={{x:j,y:i}} 
+                figure={tempCell} 
+                canMoveHere={isMarked} 
+                onClickHandler={(pos)=>onClickHandler(pos,isMarked)}
+              /> 
             })
           })
         }

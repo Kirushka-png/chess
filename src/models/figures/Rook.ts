@@ -3,7 +3,7 @@ import RookBlack from 'assets/RookBlack.png'
 import RookWhite from 'assets/RookWhite.png'
 
 export class Rook extends Figure{
-    attackMoves: Array<IPosition> = []
+    firstMove: boolean = true
 
     constructor(pos: IPosition, side: Side){
         let img = side == 'Black' ? RookBlack : RookWhite
@@ -11,6 +11,8 @@ export class Rook extends Figure{
     }
 
     getMoves(): Array<IPosition>{
+        this.attackMoves = []
+        this.movement = []
         let tempArr = [[-1,0], [1,0], [0,1], [0,-1]]
         for(let i = 1; i < 8 ; i++){
             for(let j = 0; j < 4; j++){
@@ -25,5 +27,10 @@ export class Rook extends Figure{
             }
         }
         return this.attackMoves
+    }
+
+    moveFigure(newPos: IPosition){
+        this.firstMove = false
+        this.position = newPos
     }
 }

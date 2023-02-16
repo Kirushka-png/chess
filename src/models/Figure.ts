@@ -5,6 +5,7 @@ export interface IPosition{
 export type Side = 'Black' | 'White'
 
 export class Figure {
+    attackMoves: Array<IPosition> = []
     position:  IPosition
     image: string
     movement: Array<IPosition> = []
@@ -18,5 +19,9 @@ export class Figure {
 
     moveFigure(newPos: IPosition){
         this.position = newPos
+    }
+
+    getMoves(): Array<IPosition>{
+        return []
     }
 }

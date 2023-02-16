@@ -4,7 +4,6 @@ import PawnWhite from 'assets/PawnWhite.png'
 
 export class Pawn extends Figure{
     firstMove: boolean = true
-    attackMoves: Array<IPosition> = []
 
     constructor(pos: IPosition, side: Side){
         let img = side == 'Black' ? PawnBlack : PawnWhite
@@ -12,12 +11,20 @@ export class Pawn extends Figure{
     }
 
     getMoves(): Array<IPosition>{
+        this.attackMoves = []
+        this.movement = []
         let pos = this.position
         let temp = this.side == 'Black' ? 1 : -1
         this.attackMoves.push({x: pos.x + temp, y: pos.y + temp})
         this.attackMoves.push({x: pos.x - temp, y: pos.y + temp})
         this.movement.push({x: pos.x, y: pos.y + temp})
-        return this.movement
+        this.firstMove && this.movement.push({x: pos.x, y: pos.y + temp * 2})
+        return [...this.movement, ...this.attackMoves]
+    }
+
+    moveFigure(newPos: IPosition){
+        this.firstMove = false
+        this.position = newPos
     }
     
 }

@@ -3,7 +3,6 @@ import BishopBlack from 'assets/BishopBlack.png'
 import BishopWhite from 'assets/BishopWhite.png'
 
 export class Bishop extends Figure{
-    attackMoves: Array<IPosition> = []
 
     constructor(pos: IPosition, side: Side){
         let img = side == 'Black' ? BishopBlack : BishopWhite
@@ -11,6 +10,8 @@ export class Bishop extends Figure{
     }
 
     getMoves(): Array<IPosition>{
+        this.attackMoves = []
+        this.movement = []
         let tempArr = [[-1,-1], [1,1], [-1,1], [1,-1]]
         for(let i = 1; i < 8 ; i++){
             for(let j = 0; j < 4; j++){

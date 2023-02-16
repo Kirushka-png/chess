@@ -3,7 +3,6 @@ import KnightBlack from 'assets/KnightBlack.png'
 import KnightWhite from 'assets/KnightWhite.png'
 
 export class Knight extends Figure{
-    attackMoves: Array<IPosition> = []
 
     constructor(pos: IPosition, side: Side){
         let img = side == 'Black' ? KnightBlack : KnightWhite
@@ -12,6 +11,8 @@ export class Knight extends Figure{
 
 
     getMoves(): Array<IPosition>{
+        this.attackMoves = []
+        this.movement = []
         let tempArr = [[-2,1], [-2,-1], [2,1], [2,-1], [1,-2], [1,2], [-1,2], [-1,-2]]
         for(let j = 0; j < 8; j++){
             let newXpos = this.position.x+tempArr[j][0]
