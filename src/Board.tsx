@@ -10,6 +10,7 @@ function GameBoard() {
 
   const [cells, setCells] = useState(board.cells)
   const [selectedFigure, setSelectedFigure] = useState<Figure | null>(null)
+  const [possibleMoves, setPossibleMoves] = useState<Array<IPosition>>([])
   const numbers = [0, 1, 2, 3, 4, 5, 6, 7];
 
   const onClickHandler = (pos: IPosition, isMarked: boolean) =>{
@@ -20,6 +21,12 @@ function GameBoard() {
   const positionCompare = (pos1: IPosition,pos2:IPosition) : boolean =>{
     return (pos1.x == pos2.x) && (pos1.y == pos2.y)
   }
+  useEffect(() => {
+    if(selectedFigure !== null){
+      setPossibleMoves(board.getPossibleMoves(selectedFigure))
+    }
+  }, [selectedFigure])
+  
 
   return (
     <BoardContainer>
@@ -28,7 +35,7 @@ function GameBoard() {
           numbers.map((i) => {
             return numbers.map((j) => {
               let tempCell = cells.get(i*8+j)
-              let isMarked = selectedFigure != null && board.isMarkedPosition({x:j,y:i},selectedFigure)
+              let isMarked = selectedFigure != null && !!possibleMoves.find((pos) => pos.x == j && pos.y == i)
               return tempCell !== undefined && 
               <Cell 
                 key={i*8+j} 

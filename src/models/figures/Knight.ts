@@ -7,17 +7,18 @@ export class Knight extends Figure{
     constructor(pos: IPosition, side: Side){
         let img = side == 'Black' ? KnightBlack : KnightWhite
         super(pos, side, img)
+        this.type = 'Knight'
     }
 
 
-    getMoves(): Array<IPosition>{
+    getMoves(cells: Map<number,Figure | null>): Array<IPosition>{
         this.attackMoves = []
-        this.movement = []
         let tempArr = [[-2,1], [-2,-1], [2,1], [2,-1], [1,-2], [1,2], [-1,2], [-1,-2]]
         for(let j = 0; j < 8; j++){
             let newXpos = this.position.x+tempArr[j][0]
             let newYpos = this.position.y+tempArr[j][1]
-            if(newXpos >= 0 && newYpos >= 0 && newXpos <=7 && newYpos <= 7){
+            let tempCell = this.checkFigure({x:newXpos, y: newYpos}, cells)
+            if(newXpos >= 0 && newYpos >= 0 && newXpos <=7 && newYpos <= 7 && (tempCell == null || tempCell.side != this.side)){
                 this.attackMoves.push({
                     x: newXpos,
                     y: newYpos

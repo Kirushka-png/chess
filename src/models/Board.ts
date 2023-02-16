@@ -8,7 +8,7 @@ import { Rook } from "./figures/Rook"
 
 type Turn = 'Black' | 'White' | 'Tied'
 
-type FigureType = 'King' | 'Queen' | 'Pawn' | 'Rook' | 'Knight' | 'Bishop'
+export type FigureType = 'King' | 'Queen' | 'Pawn' | 'Rook' | 'Knight' | 'Bishop'
 
 
 export class Board {
@@ -94,8 +94,8 @@ export class Board {
         }
     }
 
-    isMarkedPosition(pos: IPosition, selectedFigure: Figure): boolean{
-        let allMoves: Array<IPosition> = selectedFigure.getMoves()
-        return allMoves.find((figurePosition)=> figurePosition.x == pos.x && figurePosition.y == pos.y) != undefined
+    getPossibleMoves(figure: Figure): Array<IPosition>{
+        let allMoves: Array<IPosition> = figure.getMoves(this.cells)
+        return allMoves
     }
 }

@@ -1,3 +1,5 @@
+import { FigureType } from "./Board"
+
 export interface IPosition{
     x: number,
     y:number
@@ -10,6 +12,7 @@ export class Figure {
     image: string
     movement: Array<IPosition> = []
     side: Side
+    type: FigureType = 'Pawn'
 
     constructor(pos: IPosition, side: Side, image: string){
         this.position = pos
@@ -21,7 +24,12 @@ export class Figure {
         this.position = newPos
     }
 
-    getMoves(): Array<IPosition>{
+    checkFigure(pos: IPosition, cells: Map<number,Figure | null>): Figure | null{
+        let figure = cells.get(pos.x + pos.y*8)
+        return figure != undefined ? figure : null
+    }
+    
+    getMoves(cells: Map<number,Figure | null>): Array<IPosition>{
         return []
     }
 }
