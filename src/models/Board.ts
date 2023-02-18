@@ -16,6 +16,7 @@ export class Board {
     turn: Turn = 'Tied'
     boardSize: number = 8
     cells = new Map<number, Figure | null>()
+    kings: Array<King> = []
 
     constructor() {
         for (let x = 0; x < this.boardSize; x++) {
@@ -40,8 +41,8 @@ export class Board {
             this.createNewFigure({x:tempArr[i][0]+(change*2),y: tempArr[i][1]}, side, 'Bishop')
         }
         tempArr = [[4,0],[3,7]]
-        for(let i =0; i < 2; i++){
-            let side: Side = i % 2 ==0 ? 'Black' : 'White'
+        for(let i = 0; i < 2; i++){
+            let side: Side = i % 2 == 0 ? 'Black' : 'White'
             let change: number = i > 0 ? -1 : 1
             this.createNewFigure({x:tempArr[i][0],y: tempArr[i][1]}, side, 'King')
             this.createNewFigure({x:tempArr[i][0] - change,y: tempArr[i][1]}, side, 'Queen')
@@ -54,6 +55,7 @@ export class Board {
         switch (figureType) {
             case 'King':
                 figure = new King(pos, side)
+                this.kings.push(figure)
                 break;
             case 'Queen':
                 figure = new Queen(pos, side)
@@ -90,12 +92,25 @@ export class Board {
                 selectedFigure.moveFigure({x:pos.x,y:pos.y})
                 this.turn = this.turn == 'White' ? 'Black' : 'White'
             }
+            this.kings[0].getUnderCheck(this.cells)
+            this.kings[1].getUnderCheck(this.cells)
             return null
         }
     }
 
     getPossibleMoves(figure: Figure): Array<IPosition>{
+        let possibleMoves: Array<IPosition> = []
         let allMoves: Array<IPosition> = figure.getMoves(this.cells)
-        return allMoves
+        let tempKing = figure.side == 'Black' ? this.kings[0] : this.kings[1]
+        allMoves.forEach((pos)=>{
+            let tempCells = new Map(this.cells)
+            let tempPos = figure.type == 'King' ? pos : null
+            tempCells.set(figure.position.x + figure.position.y * 8, null)
+            tempCells.set(pos.x + pos.y*8, figure)
+            if(tempKing.getKingDirections(tempCells,tempPos).findIndex((dir) => dir.security == 'unsafe') == -1){
+                possibleMoves.push(pos)
+            }
+        })
+        return possibleMoves
     }
 }

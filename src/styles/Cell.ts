@@ -4,12 +4,13 @@ import colors from "utils/color";
 interface ICellContainer{
     position: IPosition
     selected: boolean
+    underCheck: boolean
 }
 
 const CellContainer = styled.div<ICellContainer>`
     width: 80px;
     height: 80px;
-    background-color:${({position: p, selected: s}: ICellContainer) => s ? colors.PURPLE : ((p.x + p.y) % 2) == 0 ? colors.BLACK : colors.WHITE} ;
+    background-color:${({position: p, selected: s, underCheck: uC}: ICellContainer) =>uC ? colors.RED : s ? colors.PURPLE : ((p.x + p.y) % 2) == 0 ? colors.BLACK : colors.WHITE} ;
     position: relative;
     display: flex;
     justify-content: center;
@@ -28,6 +29,13 @@ export const Mark = styled.div`
     height: 20px;
     background-color: ${colors.PURPLE};
     border-radius: 10px;
+`
+
+export const TempCell = styled.div`
+    position: absolute;
+    top: 0px;
+    left:0px;
+    color: red;
 `
 
 export default CellContainer

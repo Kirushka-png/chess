@@ -25,7 +25,7 @@ export class Figure {
     }
 
     checkFigure(pos: IPosition, cells: Map<number,Figure | null>): Figure | null{
-        let figure = cells.get(pos.x + pos.y*8)
+        let figure = (pos.x < 8 && pos.x >=0 && pos.y < 8 && pos.y >= 0) ? cells.get(pos.x + pos.y*8) : undefined
         return figure != undefined ? figure : null
     }
     

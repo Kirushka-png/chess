@@ -1,7 +1,7 @@
 import Cell from 'components/Cell';
 import { Board } from 'models/Board';
 import { Figure, IPosition } from 'models/Figure';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import BoardContainer, { BoardPlace } from 'styles/Board';
 
 const board = new Board()
