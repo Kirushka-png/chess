@@ -78,7 +78,7 @@ export class Board {
     }
 
     onCellClick(pos:IPosition, selectedFigure: Figure | null, isMarked: boolean): (Figure | null){
-        if(selectedFigure == null){
+        if(selectedFigure == null || !isMarked){
             let figure = this.cells.get(pos.x + pos.y * 8)
             if(figure != null && figure.side == this.turn ){
                 return figure
