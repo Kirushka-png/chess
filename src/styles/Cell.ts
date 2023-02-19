@@ -11,12 +11,12 @@ interface ICellContainer{
 const CellContainer = styled.div<ICellContainer>`
     width: 80px;
     height: 80px;
-    background-color:${({position: p, selected: s, underCheck: uC, lastMove: lM}: ICellContainer) => lM ? colors.LIGHT_PURPLE 
+    background-color:${({position: p, selected: s, underCheck: uC, lastMove: lM}: ICellContainer) => s ? colors.PURPLE 
         : uC ? colors.RED 
-        : s ? colors.PURPLE 
+        : lM ? colors.LIGHT_PURPLE 
         : ((p.x + p.y) % 2) == 0 ? colors.BLACK 
         : colors.WHITE} ;
-        
+
     position: relative;
     display: flex;
     justify-content: center;
