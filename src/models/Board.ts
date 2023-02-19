@@ -77,6 +77,15 @@ export class Board {
         this.cells.set(pos.x + pos.y * 8, figure)
     }
 
+    castling(){
+
+    }
+
+    makeMove(selectedFigure: Figure, pos:IPosition){
+        this.cells.set(selectedFigure.position.x + selectedFigure.position.y * 8, null)
+        this.cells.set(pos.x + pos.y*8, selectedFigure)
+        selectedFigure.moveFigure({x:pos.x,y:pos.y})
+    }
     onCellClick(pos:IPosition, selectedFigure: Figure | null, isMarked: boolean): (Figure | null){
         if(selectedFigure == null || !isMarked){
             let figure = this.cells.get(pos.x + pos.y * 8)
@@ -87,9 +96,16 @@ export class Board {
         }
         else{
             if(isMarked){
-                this.cells.set(selectedFigure.position.x + selectedFigure.position.y * 8, null)
-                this.cells.set(pos.x + pos.y*8, selectedFigure)
-                selectedFigure.moveFigure({x:pos.x,y:pos.y})
+                let diff = pos.x - selectedFigure.position.x
+                if(selectedFigure instanceof King && (diff < -1 || diff > 1)){
+                    let tempX = diff < 0 ? 0 : 7
+                    let tempRook = this.cells.get(tempX + pos.y * 8)
+                    if(tempRook instanceof Rook) {
+                        let tempK = diff < 0 ? -1 : 1
+                        this.makeMove(tempRook, {x: selectedFigure.position.x + tempK, y: pos.y})
+                    }
+                }
+                this.makeMove(selectedFigure, pos)
                 this.turn = this.turn == 'White' ? 'Black' : 'White'
             }
             this.kings[0].getUnderCheck(this.cells)
@@ -101,6 +117,14 @@ export class Board {
     getPossibleMoves(figure: Figure): Array<IPosition>{
         let possibleMoves: Array<IPosition> = []
         let allMoves: Array<IPosition> = figure.getMoves(this.cells)
+        if(figure instanceof King) {
+            let moves = figure.checkOnСastling(this.cells) 
+            if(moves !== null){
+                moves.forEach((el)=>{
+                    allMoves.push(el)
+                })
+            }
+        }
         let tempKing = figure.side == 'Black' ? this.kings[0] : this.kings[1]
         allMoves.forEach((pos)=>{
             let tempCells = new Map(this.cells)

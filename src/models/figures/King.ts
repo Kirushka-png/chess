@@ -40,6 +40,28 @@ export class King extends Figure{
         return this.attackMoves
     }
 
+    checkOnСastling(cells: Map<number,Figure | null>): Array<IPosition> | null{
+        if(!this.firstMove || this.underСheck) return null
+
+        let moves: Array<IPosition> = []
+        let tempArr = [-3,-2,-1, 1, 2, 3,4]
+        let tempCells = []
+        let sideK = this.side == 'White' ? 1 : -1
+        for (let i = 0; i < 7; i++) {
+            let newXpos = this.position.x+(tempArr[i] * sideK)
+            let newYpos = this.position.y
+            tempCells.push(this.checkFigure({x:newXpos, y: newYpos}, cells))
+        }
+        if(tempCells[1] === null && tempCells[2] === null && tempCells[0]?.type === 'Rook'){
+            moves.push({x: this.position.x + (tempArr[1] * sideK), y:this.position.y})
+        }
+        if(tempCells[3] === null && tempCells[4] === null && tempCells[5] === null && tempCells[6]?.type === 'Rook'){
+            moves.push({x: this.position.x + (tempArr[4] * sideK), y:this.position.y})
+
+        }
+        return moves.length == 0 ? null : moves
+    }
+
     getKingDirections(cells: Map<number,Figure | null>, position: IPosition | null): Array<IKingDirection>{
         let knightArr = [[-2,1], [-2,-1], [2,1], [2,-1], [1,-2], [1,2], [-1,2], [-1,-2]]
         let tempArr: Array<IKingDirection> = [{x:-1,y:0,security: null}, {x:1,y:0,security: null}, {x:0,y:1,security: null}, {x:0,y:-1,security: null}, {x:-1,y:-1,security: null}, {x:1,y:1,security: null}, {x:-1,y:1,security: null}, {x:1,y:-1,security: null}]
