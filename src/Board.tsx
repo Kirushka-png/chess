@@ -8,6 +8,7 @@ const board = new Board()
 
 function GameBoard() {
 
+
   const [cells, setCells] = useState(board.cells)
   const [selectedFigure, setSelectedFigure] = useState<Figure | null>(null)
   const [possibleMoves, setPossibleMoves] = useState<Array<IPosition>>([])
@@ -18,9 +19,10 @@ function GameBoard() {
     setSelectedFigure(tempFigure)
   }
 
-  const positionCompare = (pos1: IPosition,pos2:IPosition) : boolean =>{
-    return (pos1.x == pos2.x) && (pos1.y == pos2.y)
+  const positionCompare = (pos1: IPosition | null,pos2:IPosition | null) : boolean =>{
+    return (pos1?.x == pos2?.x) && (pos1?.y == pos2?.y)
   }
+  
   useEffect(() => {
     if(selectedFigure !== null){
       setPossibleMoves(board.getPossibleMoves(selectedFigure))
@@ -42,7 +44,8 @@ function GameBoard() {
                 selected={selectedFigure != null && positionCompare(selectedFigure.position, {x:j,y:i})} 
                 position={{x:j,y:i}} 
                 figure={tempCell} 
-                canMoveHere={isMarked} 
+                canMoveHere={isMarked}
+                lastMove={positionCompare(board.lastMove[0],{x:j,y:i}) || positionCompare(board.lastMove[1],{x:j,y:i})}
                 onClickHandler={(pos)=>onClickHandler(pos,isMarked)}
               /> 
             })

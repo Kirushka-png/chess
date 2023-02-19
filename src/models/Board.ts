@@ -17,6 +17,7 @@ export class Board {
     boardSize: number = 8
     cells = new Map<number, Figure | null>()
     kings: Array<King> = []
+    lastMove: [IPosition | null, IPosition | null] = [null, null]
 
     constructor() {
         for (let x = 0; x < this.boardSize; x++) {
@@ -77,10 +78,6 @@ export class Board {
         this.cells.set(pos.x + pos.y * 8, figure)
     }
 
-    castling(){
-
-    }
-
     makeMove(selectedFigure: Figure, pos:IPosition){
         this.cells.set(selectedFigure.position.x + selectedFigure.position.y * 8, null)
         this.cells.set(pos.x + pos.y*8, selectedFigure)
@@ -105,6 +102,7 @@ export class Board {
                         this.makeMove(tempRook, {x: selectedFigure.position.x + tempK, y: pos.y})
                     }
                 }
+                this.lastMove =[pos,selectedFigure.position]
                 this.makeMove(selectedFigure, pos)
                 this.turn = this.turn == 'White' ? 'Black' : 'White'
             }

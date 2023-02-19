@@ -8,13 +8,14 @@ interface ICell {
     figure: Figure | null,
     canMoveHere: boolean,
     onClickHandler(pos: IPosition): void,
-    selected: boolean
+    selected: boolean,
+    lastMove: boolean
 }
 
-const Cell = memo(({ position, figure, canMoveHere, onClickHandler, selected }: ICell) => {    
+const Cell = memo(({ position, figure, canMoveHere, onClickHandler, selected, lastMove }: ICell) => {    
 
     return (
-        <CellContainer position={position} selected={selected} underCheck={figure instanceof King && figure.underСheck} onClick={()=>onClickHandler(position)}>
+        <CellContainer position={position} selected={selected} underCheck={figure instanceof King && figure.underСheck} lastMove={lastMove} onClick={()=>onClickHandler(position)}>
             {//<TempCell>{'x:'+position.x+'  y:'+position.y}</TempCell>
             }
             {canMoveHere && <Mark/>}
