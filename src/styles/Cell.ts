@@ -13,7 +13,7 @@ const CellContainer = styled.div<ICellContainer>`
     height: 80px;
     background-color:${({position: p, selected: s, underCheck: uC, lastMove: lM}: ICellContainer) => s ? colors.PURPLE 
         : uC ? colors.RED 
-        : lM ? colors.LIGHT_PURPLE 
+        : lM ? (((p.x + p.y) % 2) == 0 ? colors.DARK_PURPLE : colors.LIGHT_PURPLE)
         : ((p.x + p.y) % 2) == 0 ? colors.BLACK 
         : colors.WHITE} ;
 
