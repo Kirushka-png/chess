@@ -16,4 +16,21 @@ export const BoardPlace = styled.div`
     flex-wrap: wrap;
 `
 
+export const TimerContainer = styled.div`
+    width: 200px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: 640px;
+    font-size: 24px;
+    font-weight: 600;
+`
+
+export const TurnContainer = styled.span`
+    color: white;
+    text-align: center;
+`
+
 export default BoardContainer

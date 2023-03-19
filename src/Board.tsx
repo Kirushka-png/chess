@@ -1,18 +1,25 @@
 import Cell from 'components/Cell';
+import Timer from 'components/Timer';
 import { Board } from 'models/Board';
 import { Figure, IPosition } from 'models/Figure';
 import { useCallback, useEffect, useState } from 'react';
-import BoardContainer, { BoardPlace } from 'styles/Board';
+import BoardContainer, { BoardPlace, TimerContainer, TurnContainer } from 'styles/Board';
 
 const board = new Board()
 
 function GameBoard() {
 
+  const TurnMock = {
+    'White': 'Ход белых',
+    'Black': 'Ход черных',
+    'Tied': 'Ничья'
+  }
 
   const [cells, setCells] = useState(board.cells)
   const [selectedFigure, setSelectedFigure] = useState<Figure | null>(null)
   const [possibleMoves, setPossibleMoves] = useState<Array<IPosition>>([])
   const numbers = [0, 1, 2, 3, 4, 5, 6, 7];
+  const [loseByTime, setLoseByTime] = useState(false)
 
   const onClickHandler = (pos: IPosition, isMarked: boolean) =>{
     let tempFigure = board.onCellClick(pos, selectedFigure, isMarked)
@@ -28,10 +35,23 @@ function GameBoard() {
       setPossibleMoves(board.getPossibleMoves(selectedFigure))
     }
   }, [selectedFigure])
-  
+
+  const time: Array<Date> = [new Date(), new Date()];
+  time[0].setSeconds(time[0].getSeconds() + 10);
+  time[1].setSeconds(time[1].getSeconds() + 10);
+
 
   return (
     <BoardContainer>
+      <TimerContainer>
+        <TurnContainer>
+          <Timer expiryTimestamp={time[0]} onPause={board.turn !== 'Black'} onExpire={() => setLoseByTime(true)}/>
+          {
+            loseByTime ? 'Поражение по времени' : board.onMate ? 'Мат' : TurnMock[board.turn]
+          }
+          <Timer expiryTimestamp={time[1]} onPause={board.turn !== 'White'} onExpire={() => setLoseByTime(true)}/>
+        </TurnContainer>
+      </TimerContainer>
       <BoardPlace>
         {
           numbers.map((i) => {

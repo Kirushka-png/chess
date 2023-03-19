@@ -18,6 +18,7 @@ export class Board {
     cells = new Map<number, Figure | null>()
     kings: Array<King> = []
     lastMove: [IPosition | null, IPosition | null] = [null, null]
+    onMate: boolean = true
 
     constructor() {
         for (let x = 0; x < this.boardSize; x++) {
@@ -48,6 +49,7 @@ export class Board {
             this.createNewFigure({x:tempArr[i][0],y: tempArr[i][1]}, side, 'King')
             this.createNewFigure({x:tempArr[i][0] - change,y: tempArr[i][1]}, side, 'Queen')
         }
+        this.onMate = false
         this.turn = 'White'
     }
 
@@ -104,7 +106,8 @@ export class Board {
                 }
                 this.lastMove =[pos,selectedFigure.position]
                 this.makeMove(selectedFigure, pos)
-                this.turn = this.turn == 'White' ? 'Black' : 'White'
+                this.onMate = this.checkOnMate()
+                this.turn = this.onMate ? 'Tied' : this.turn == 'White' ? 'Black' : 'White'
             }
             this.kings[0].getUnderCheck(this.cells)
             this.kings[1].getUnderCheck(this.cells)
@@ -134,5 +137,17 @@ export class Board {
             }
         })
         return possibleMoves
+    }
+
+    checkOnMate(){
+        let allMoves: Array<IPosition> = []
+        this.cells.forEach(figure => {
+            if(figure && figure?.side !== this.turn){
+                this.getPossibleMoves(figure).forEach(move =>{
+                    allMoves.push(move)
+                })
+            }
+        });
+        return allMoves.length === 0 ? true : false
     }
 }
