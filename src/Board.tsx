@@ -36,6 +36,11 @@ function GameBoard() {
     }
   }, [selectedFigure])
 
+  useEffect(() => {
+    if(loseByTime) board.loseByTime()
+  }, [loseByTime])
+  
+
   const time: Array<Date> = [new Date(), new Date()];
   time[0].setSeconds(time[0].getSeconds() + 10);
   time[1].setSeconds(time[1].getSeconds() + 10);

@@ -42,12 +42,11 @@ export class Board {
             this.createNewFigure({x:tempArr[i][0]+change,y: tempArr[i][1]}, side, 'Knight')
             this.createNewFigure({x:tempArr[i][0]+(change*2),y: tempArr[i][1]}, side, 'Bishop')
         }
-        tempArr = [[4,0],[3,7]]
+        tempArr = [[3,0],[3,7]]
         for(let i = 0; i < 2; i++){
             let side: Side = i % 2 == 0 ? 'Black' : 'White'
-            let change: number = i > 0 ? -1 : 1
             this.createNewFigure({x:tempArr[i][0],y: tempArr[i][1]}, side, 'King')
-            this.createNewFigure({x:tempArr[i][0] - change,y: tempArr[i][1]}, side, 'Queen')
+            this.createNewFigure({x:tempArr[i][0] + 1,y: tempArr[i][1]}, side, 'Queen')
         }
         this.onMate = false
         this.turn = 'White'
@@ -113,6 +112,11 @@ export class Board {
             this.kings[1].getUnderCheck(this.cells)
             return null
         }
+    }
+
+    loseByTime(){
+        this.onMate = true
+        this.turn = 'Tied'
     }
 
     getPossibleMoves(figure: Figure): Array<IPosition>{
